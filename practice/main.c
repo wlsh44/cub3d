@@ -7,21 +7,27 @@
 #define TILE_SIZE 32
 #define MAP_NUM_ROWS 11
 #define MAP_NUM_COLS 15
+#define Y 1080
+#define X 720
 
-#define FRONT 13
-#define BACK 1
-#define LEFT 0
-#define RIGHT 2
+#define W 13
+#define A 0
+#define S 1
+#define D 2
 #define ESC 53
 #define UPPER 126
 #define DOWN 125
 #define LEFT_ARROW 123
 #define RIGHT_ARROW 124
 
+#define SPEED 1.0
+#define TURN 5
+
 typedef struct t_map {
 	int grid[11][15];
+	double x_ratio;
+	double y_ratio;
 } t_map;
-
 
 typedef struct  s_data {
     void        *img;
@@ -30,22 +36,18 @@ typedef struct  s_data {
     int         line_length;
     int         endian;
 }               t_data;
-
-
-typedef struct s_vector {
+typedef struct s_pos {
 	int x;
 	int y;
-} t_vector;
+} t_pos;
 
-typedef struct s_player{
-	t_vector vec;
-	int radius;
-	int turn_direction;
-	int walk_direction;
+typedef struct s_player {
+	int x;
+	int y;
 	double rotation_angle;
-	double move_speed;
-	double rotation_speed;	
-}	t_player;
+	double r;
+} t_player;
+
 
 typedef struct s_mlx {
 	void *mlx;
@@ -55,16 +57,6 @@ typedef struct s_mlx {
 	t_map m;
 } t_mlx;
 
-void init_player (t_player *player) {
-	player->vec.x = 240;
-	player->vec.y = 176;
-	player->radius = 3;
-	player->turn_direction = 0;
-	player->walk_direction = 0;
-	player->rotation_angle = 0;
-	player->move_speed = 2.0;
-	player->rotation_speed = 2 * (M_PI / 180);
-}
 
 void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -76,68 +68,6 @@ void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 double get_radian(int num) {
 	return num * (M_PI / 180);
-}
-
-void zero_exception(t_vector s, t_vector e, t_data *data) {
-	
-}
-
-double get_distance(t_vector s, t_vector e) {
-	return sqrt((e.x - s.x) * (e.x - s.x) + (e.y - s.y) * (e.y - s.y));
-}
-
-void line(t_vector s, t_vector e, t_data *data) {
-	int m;
-	int new_m;
-	int d;
-	
-	d = get_distance(s, e);
-	if (e.x - s.x == 0) {
-		if (e.y >= s.y) {
-			for (int y = s.y; y < e.y; y++) {
-				my_mlx_pixel_put(data, s.x, y, 0x00BFFF);
-			}
-		} else {
-			for (int y = e.y; y < s.y; y++) {
-				my_mlx_pixel_put(data, s.x, y, 0x00BFFF);
-			}
-		}
-	}
-	else {
-		m = (e.y - s.y) / (e.x - s.x);
-		for (int x = 0; x < 500; x++) {
-			for (int y = 0; y < 500; y++) {
-				t_vector tmp;
-
-				tmp.x = x;
-				tmp.y = y;
-				if (x - s.x != 0 && get_distance(s, tmp) <= d) {
-					new_m = (y - s.y) / (x - s.x);
-					if (new_m == m) {
-						my_mlx_pixel_put(data, x, y, 0x00BFFF);
-					}
-				}
-			}
-		}
-	}
-}
-
-void render_player(t_player *player, t_data *data) {
-	t_vector sight;
-	
-	player->vec.x = cos(player->rotation_angle) * player->walk_direction * player->move_speed;
-	sight.x = player->vec.x + cos(player->rotation_angle) * 20;
-	sight.y = player->vec.y + sin(player->rotation_angle) * 20;
-	for (double theta = 0; theta < 180; theta += 0.1) {
-		for (double y = player->vec.y - player->radius * sin(get_radian(theta)); y < player->vec.y + player->radius * sin(get_radian(theta)); y += 0.1) {
-			//printf("%f\n", y);
-			//printf("%f\n", (get_radian(theta)));
-			my_mlx_pixel_put(data, player->vec.x + player->radius * (1 - cos(get_radian(theta))), y, 0x00BFFF);
-		}
-	}
-
-	line(player->vec, sight, data);
-
 }
 
 void init_map(t_map *m) {
@@ -157,12 +87,10 @@ void init_map(t_map *m) {
 			m->grid[i][j] = map[i][j];
 		}
 	}
+	m->x_ratio = X / MAP_NUM_ROWS;
+	m->y_ratio = Y / MAP_NUM_COLS;
 }
 
-void setup() {
-	//init objs
-
-}
 int closed(t_mlx *mlx) {
 	mlx_destroy_window(mlx->mlx, mlx->mlx_win);
 	free(mlx);
@@ -170,79 +98,102 @@ int closed(t_mlx *mlx) {
 	return (0);
 }
 
+void move(t_player *player, int c) {
+	printf("x dif: %f\n", sin(get_radian(player->rotation_angle) * c) * player->r * SPEED);
+	player->x -= sin(get_radian(player->rotation_angle) * c) * player->r * SPEED;
+	player->y += cos(get_radian(player->rotation_angle) * c) * player->r * SPEED;
+}
+
+void turn(t_mlx *mlx, char c) {
+	
+}
+
 int key_press(int keycode, t_mlx *mlx) {
-	printf("%d\n", keycode);
-	if (keycode == FRONT) {
-		mlx->player.walk_direction = 1;
+	//printf("%d\n", keycode);
+	printf("%d %d\n", mlx->player.x, mlx->player.y);
+
+	if (keycode == W) {
+		// mlx->player.walk_direction = 1;
+		move(&mlx->player, 1);
 	}
-	else if (keycode == BACK)
-		mlx->player.walk_direction = -1;
-	else if (keycode == RIGHT)
-		mlx->player.turn_direction = 1;
-	else if (keycode == LEFT)
-		mlx->player.turn_direction = -1;
+	else if (keycode == S)
+		// mlx->player->player.walk_direction = -1;
+	 	move(&mlx->player, -1);
+	// else if (keycode == D)
+	// 	// mlx->player->player.turn_direction = 1;
+	// 	move(mlx->player, 'd');
+	// else if (keycode == A)
+	// 	// mlx->player->player.turn_direction = -1;
+	// 	move(mlx->player, 'a');
 	else if (keycode == RIGHT_ARROW) 
-		mlx->player.rotation_angle += 1;
+		mlx->player.rotation_angle -= TURN;
+		//turn(mlx->player, 'r');
 	else if (keycode == LEFT_ARROW)
-		mlx->player.rotation_angle -= 0.1;
+		mlx->player.rotation_angle += TURN;
+	// 	turn(mlx->player, 'l');
 	else if (keycode == ESC)
 		closed(mlx);
 
 	return (0);
 }
 
-int key_released(int keycode, t_mlx *mlx) {
-	printf("%d\n", keycode);
-	printf("rotation angle: %f\n", mlx->player.rotation_angle);
-	if (keycode == FRONT) {
-		mlx->player.walk_direction = 0;
-	}
-	else if (keycode == BACK)
-		mlx->player.walk_direction = 0;
-	else if (keycode == RIGHT)	
-		mlx->player.turn_direction = 0;
-	else if (keycode == LEFT)
-		mlx->player.turn_direction = 0;
-	// else if (keycode == RIGHT_ARROW)
-	// else if (keycode == LEFT_ARROW)
-	else if (keycode == ESC)
-		closed(mlx);
-
-	return (0);
-}
+// int key_released(int keycode, t_mlx *mlx) {
+// 	//printf("%d\n", keycode);
+// 	//printf("rotation angle: %f\n", mlx->player.rotation_angle);
+// 	if (keycode == W) {
+// 		//move(mlx, );
+// 	}
+// 	else if (keycode == S)
+// 		move(mlx, 's');
+// 	else if (keycode == D)	
+// 		move(mlx, 's');
+// 	else if (keycode == A)
+// 		move(mlx, 's');
+// 	// else if (keycode == RIGHT_ARROW)
+// 	// else if (keycode == LEFT_ARROW)
+// 	else if (keycode == ESC)
+// 		closed(mlx);
+// 	return (0);
+// }
 
 void print_tile(t_map *m, int x, int y, int color, t_data *data) {
-	for (int i = x - TILE_SIZE; i < x; i++) {
-		for (int j = y - TILE_SIZE; j < y; j++) {
+	for (int i = x - m->x_ratio; i < x; i++) {
+		for (int j = y - m->y_ratio; j < y; j++) {
 			my_mlx_pixel_put(data, i, j, color);
 		}
 	}
 }
 
 void render(t_map *m, t_data *data) {
-	for (int i = 1; i <= MAP_NUM_ROWS; i++) {
-		for (int j = 1; j <= MAP_NUM_COLS; j++) {
-			int tile_x = j * TILE_SIZE;
-			int tile_y = i * TILE_SIZE;
-			int tile_color = m->grid[i - 1][j - 1] == 1 ? 0x111111 : 0xffffff;
+	for (int x = 1; x <= MAP_NUM_ROWS; x++) {
+		for (int y = 1; y <= MAP_NUM_COLS; y++) {
+			int tile_x = x * m->x_ratio;
+			int tile_y = y * m->y_ratio;
+			int tile_color = m->grid[x - 1][y - 1] == 1 ? 0x111111 : 0xffffff;
 
-			print_tile(m, tile_x, tile_y, tile_color, data);
+			print_tile(m, tile_y, tile_x, tile_color, data);
 			//printf("%d\n", i+j);
 		}
 	}
 }
 
-void update() {
-	//update objs before render the next frame
+void init_player(t_player *player) {
+	player->x = 360;
+	player->y = 540;
+	player->rotation_angle = 90;
+	player->r = 10;
 }
 
-void draw() {
-	//render objs by frame
-	update();
+void render_player(t_player *player, t_data *data) {
+	for (double theta = 0; theta < 180; theta += 0.1) {
+		for (double y = player->y - player->r * sin(get_radian(theta)); y < player->y + player->r * sin(get_radian(theta)); y += 0.1) {
+			my_mlx_pixel_put(data, y, player->x + player->r * (1 - cos(get_radian(theta))), 0x00BFFF);
+		}
+	}
 }
 
 int loop(t_mlx *mlx) {
-	render(&mlx->m, &mlx->img);
+	//render(&mlx->m, &mlx->img);
 	render_player(&mlx->player, &mlx->img);
 	mlx_put_image_to_window(mlx->mlx, mlx->mlx_win, mlx->img.img, 0, 0);
 	return (0);
@@ -256,11 +207,11 @@ int main() {
 	init_player(&mlx->player);
 
 	mlx->mlx = mlx_init();
-	mlx->mlx_win = mlx_new_window(mlx->mlx, 500, 500, "test");
-	mlx->img.img = mlx_new_image(mlx->mlx, 500, 500);
+	mlx->mlx_win = mlx_new_window(mlx->mlx, Y, X, "test");
+	mlx->img.img = mlx_new_image(mlx->mlx, Y, X);
 	mlx->img.addr = mlx_get_data_addr(mlx->img.img, &mlx->img.bits_per_pixel, &mlx->img.line_length, &mlx->img.endian);
 	mlx_hook(mlx->mlx_win, 2, 1L<<0, key_press, mlx);	
-	mlx_hook(mlx->mlx_win, 3, 1L<<1, key_released, mlx);
+	//mlx_hook(mlx->mlx_win, 3, 1L<<1, key_released, mlx);
 	mlx_loop_hook(mlx->mlx, loop, mlx);
 	//
 	mlx_loop(mlx->mlx);
