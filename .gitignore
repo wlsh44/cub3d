@@ -3,3 +3,5 @@ libmlx.a
 libmlx.dylib
 *.o
 a.out
+ref
+
