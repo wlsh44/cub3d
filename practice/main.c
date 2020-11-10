@@ -19,7 +19,7 @@
 #define DOWN 125
 #define LEFT_ARROW 123
 #define RIGHT_ARROW 124
-
+#define ROTATE 12
 #define SPEED 1.0
 #define TURN 5
 
@@ -37,13 +37,13 @@ typedef struct  s_data {
     int         endian;
 }               t_data;
 typedef struct s_pos {
-	int x;
-	int y;
+	double x;
+	double y;
 } t_pos;
 
 typedef struct s_player {
-	int x;
-	int y;
+	double x;
+	double y;
 	double rotation_angle;
 	double r;
 } t_player;
@@ -99,9 +99,17 @@ int closed(t_mlx *mlx) {
 }
 
 void move(t_player *player, int c) {
-	printf("x dif: %f\n", sin(get_radian(player->rotation_angle) * c) * player->r * SPEED);
-	player->x -= sin(get_radian(player->rotation_angle) * c) * player->r * SPEED;
-	player->y += cos(get_radian(player->rotation_angle) * c) * player->r * SPEED;
+	//printf("x dif: %f\n", sin(get_radian(player->rotation_angle) * c) * player->r * SPEED);
+	player->x += cos(get_radian(player->rotation_angle)) * c * player->r * SPEED;
+	player->y += sin(get_radian(player->rotation_angle)) * c * player->r * SPEED;
+}
+
+void side_move(t_player *player, int c) {
+	//printf("x dif: %f\n", sin(get_radian(player->rotation_angle) * c) * player->r * SPEED);
+
+	player->x -= sin(get_radian(player->rotation_angle)) * c * player->r * SPEED;
+	player->y += cos(get_radian(player->rotation_angle)) * c * player->r * SPEED;
+
 }
 
 void turn(t_mlx *mlx, char c) {
@@ -110,7 +118,7 @@ void turn(t_mlx *mlx, char c) {
 
 int key_press(int keycode, t_mlx *mlx) {
 	//printf("%d\n", keycode);
-	printf("%d %d\n", mlx->player.x, mlx->player.y);
+	printf("%d\n", mlx->player.rotation_angle);
 
 	if (keycode == W) {
 		// mlx->player.walk_direction = 1;
@@ -119,12 +127,12 @@ int key_press(int keycode, t_mlx *mlx) {
 	else if (keycode == S)
 		// mlx->player->player.walk_direction = -1;
 	 	move(&mlx->player, -1);
-	// else if (keycode == D)
-	// 	// mlx->player->player.turn_direction = 1;
-	// 	move(mlx->player, 'd');
-	// else if (keycode == A)
-	// 	// mlx->player->player.turn_direction = -1;
-	// 	move(mlx->player, 'a');
+	else if (keycode == D)
+		// mlx->player->player.turn_direction = 1;
+		side_move(&mlx->player, -1);
+	else if (keycode == A)
+		// mlx->player->player.turn_direction = -1;
+		side_move(&mlx->player, 1);
 	else if (keycode == RIGHT_ARROW) 
 		mlx->player.rotation_angle -= TURN;
 		//turn(mlx->player, 'r');
@@ -133,7 +141,8 @@ int key_press(int keycode, t_mlx *mlx) {
 	// 	turn(mlx->player, 'l');
 	else if (keycode == ESC)
 		closed(mlx);
-
+	else if (keycode == ROTATE)
+		mlx->player.rotation_angle += 90;
 	return (0);
 }
 
@@ -180,7 +189,7 @@ void render(t_map *m, t_data *data) {
 void init_player(t_player *player) {
 	player->x = 360;
 	player->y = 540;
-	player->rotation_angle = 90;
+	player->rotation_angle = 10;
 	player->r = 10;
 }
 
