@@ -7,7 +7,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 NAME = cub3d
 
-SRC = main.c
+SRC = test.c
 
 #DIR_SRCS = ./srcs/
 
