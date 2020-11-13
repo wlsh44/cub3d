@@ -4,4 +4,4 @@ libmlx.dylib
 *.o
 a.out
 ref
-
+.DS_Store
