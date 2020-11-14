@@ -7,11 +7,13 @@ CFLAGS = -Wall -Wextra -Werror
 
 NAME = cub3d
 
-SRC = test.c
+SRC = cub3d.c \
+		key.c \
+		ray_casting.c
 
 #DIR_SRCS = ./srcs/
 
-DIR_SRCS = ./practice/
+DIR_SRCS = ./srcs/
 
 HEADER = ./includes/
 
