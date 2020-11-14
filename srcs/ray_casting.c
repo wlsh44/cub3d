@@ -63,7 +63,7 @@ void horizon(t_all *all)
         y++;
     }
 }
-
+int c;
 void ray_casting(t_all *all) 
 {
     horizon(all);

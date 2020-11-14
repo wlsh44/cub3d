@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		"complex": "c",
-		"ios": "c"
+		"ios": "c",
+		"__locale": "c"
 	}
 }
