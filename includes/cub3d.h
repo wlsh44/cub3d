@@ -18,8 +18,8 @@
 #define KEY_PRESS 2
 #define KEY_RELEASE 3
 
-#define height 480
-#define width 640
+// #define height 480
+// #define width 640
 #define texNum 11
 #define texWidth 64
 #define texHeight 64
@@ -72,19 +72,51 @@ typedef struct s_map
     int **map;
 } t_map;
 
+typedef struct s_win
+{
+    void *win;
+    int x;
+    int y;
+} t_win;
+
 typedef struct s_all
 {
     void *mlx;
-    void *win;
+    t_win win;
     t_img img;
     t_pos pos;
     t_dir dir;
     t_plane plane;
     int **buf;
     int **texture;
+    int *z_buf;
     t_map map;
 
 } t_all;
+
+typedef struct s_pair
+{
+    int x;
+    int y;
+} t_pair;
+
+typedef struct s_ver
+{
+    t_dir dir;
+    t_pos side_dist;
+    t_pos delta_dist;
+    t_pair tex;
+    t_pair pos;
+    t_pair step;
+    char wall;
+    double wall_dist;
+    double tex_pos;
+    double ratio;
+    int line_height;
+    int tex_num;
+    int start;
+    int end;
+}   t_ver;
 
 int key_press(int key, t_all *all);
 void ray_casting(t_all *all);

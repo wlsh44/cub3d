@@ -42,19 +42,19 @@ void	draw(t_all *all)
     int y;
 
     y = 0;
-	while (y < height)
+	while (y < all->win.y)
 	{
         //printf("as\n");
         x = 0;
-		while (x < width)
+		while (x < all->win.x)
 		{
             //printf("%d\n", all->buf[y][x]);
-			all->img.data[y * width + x] = all->buf[y][x];
+			all->img.data[y * all->win.x + x] = all->buf[y][x];
             x++;
         }
         y++;
 	}
-	mlx_put_image_to_window(all->mlx, all->win, all->img.img, 0, 0);
+	mlx_put_image_to_window(all->mlx, all->win.win, all->img.img, 0, 0);
 }
 
 int c;
@@ -82,16 +82,15 @@ void cubed(t_all *all) {
     all->mlx = mlx_init();
     load_texture(all);
 
-    all->img.x = width;
-    all->img.y = height;
+
     
-    all->win = mlx_new_window(all->mlx, all->img.x, all->img.y, "cub3d");
+    all->win.win = mlx_new_window(all->mlx, all->img.x, all->img.y, "cub3d");
     all->img.img = mlx_new_image(all->mlx, all->img.x, all->img.y);
     all->img.data = (int *)mlx_get_data_addr(all->img.img, &all->img.bpp, &all->img.size, &all->img.endian);
     	//printf("%d\n", all->img.bpp);
 
     mlx_loop_hook(all->mlx, &main_loop, all);
-    mlx_hook(all->win, KEY_PRESS, 0, &key_press, all);
+    mlx_hook(all->win.win, KEY_PRESS, 0, &key_press, all);
     mlx_loop(all->mlx);
 }
 
@@ -103,8 +102,8 @@ void mem_alloc(t_all *all) {
     all->buf = malloc(sizeof(int *) * all->img.y);
     while (y < all->img.y) {
         x = 0;
-        all->buf[y] = malloc(sizeof(int) * width);
-        while (x < width)
+        all->buf[y] = malloc(sizeof(int) * all->win.x);
+        while (x < all->win.x)
         {
             all->buf[y][x++] = 0;
         }
@@ -133,6 +132,35 @@ void mem_alloc(t_all *all) {
     }
 }
 
+int	worldMap[24][24] =
+									{
+										{8,8,8,8,8,8,8,8,8,8,8,4,4,6,4,4,6,4,6,4,4,4,6,4},
+										{8,0,0,0,0,0,0,0,0,0,8,4,0,0,0,0,0,0,0,0,0,0,0,4},
+										{8,0,3,3,0,0,0,0,0,8,8,4,0,0,0,0,0,0,0,0,0,0,0,6},
+										{8,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6},
+										{8,0,3,3,0,0,0,0,0,8,8,4,0,0,0,0,0,0,0,0,0,0,0,4},
+										{8,0,0,0,0,0,0,0,0,0,8,4,0,0,0,0,0,6,6,6,0,6,4,6},
+										{8,8,8,8,0,8,8,8,8,8,8,4,4,4,4,4,4,6,0,0,0,0,0,6},
+										{7,7,7,7,0,7,7,7,7,0,8,0,8,0,8,0,8,4,0,4,0,6,0,6},
+										{7,7,0,0,0,0,0,0,7,8,0,8,0,8,0,8,8,6,0,0,0,0,0,6},
+										{7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,6,0,0,0,0,0,4},
+										{7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,6,0,6,0,6,0,6},
+										{7,7,0,0,0,0,0,0,7,8,0,8,0,8,0,8,8,6,4,6,0,6,6,6},
+										{7,7,7,7,0,7,7,7,7,8,8,4,0,6,8,4,8,3,3,3,0,3,3,3},
+										{2,2,2,2,0,2,2,2,2,4,6,4,0,0,6,0,6,3,0,0,0,0,0,3},
+										{2,2,0,0,0,0,0,2,2,4,0,0,0,0,0,0,4,3,0,0,0,0,0,3},
+										{2,0,0,0,0,0,0,0,2,4,0,0,0,0,0,0,4,3,0,0,0,0,0,3},
+										{1,0,0,0,0,0,0,0,1,4,4,4,4,4,6,0,6,3,3,0,0,0,3,3},
+										{2,0,0,0,0,0,0,0,2,2,2,1,2,2,2,6,6,0,0,5,0,5,0,5},
+										{2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,5,0,5,0,0,0,5,5},
+										{2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,0,5,0,5,0,5,0,5},
+										{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5},
+										{2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,0,5,0,5,0,5,0,5},
+										{2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,5,0,5,0,0,0,5,5},
+										{2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,5,5,5,5,5,5,5,5,5}
+									};
+
+
 void init() {
     t_all all;
 
@@ -145,9 +173,17 @@ void init() {
     all.plane.y = 0.66;
     all.map.x = 24;
     all.map.y = 24;
-    all.img.x = 480;
-    all.img.y = 640;
+    all.win.x = 640;
+    all.win.y = 480;
+    all.img.x = all.win.x;
+    all.img.y = all.win.y;
     mem_alloc(&all);
+
+    for (int i = 0; i < 24; i++) {
+        for (int j = 0; j < 24; j++) {
+            all.map.map[i][j] = worldMap[i][j];
+        }
+    }
     cubed(&all);
 }
 

@@ -46,7 +46,7 @@ void strafe(int key, t_all *all) {
 
 void closed(t_all *all)
 {
-    mlx_destroy_window(all->mlx, all->win);
+    mlx_destroy_window(all->mlx, all->win.win);
     free(all->mlx);
     exit(0);
 }
