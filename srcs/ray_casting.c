@@ -147,7 +147,7 @@ void add_to_buf_ver(t_all *all, t_ver *v, int x)
         //if (v->wall == 'y')
         y++;
     }
-    //all->z_buf[x] = v->wall_dist;
+    all->z_buf[x] = v->wall_dist;
 }
 
 void dda_algorithm(t_all *all, t_ver *v)
@@ -191,9 +191,124 @@ void vertical(t_all *all)
     }
 }
 
+void sort_sprite(t_sprite *sprite, int size)
+{
+    t_pair tmp;
+    int i;
+    int j;
+    
+    i = 0;
+    while (i < size)
+    {
+        j = i;
+        while (j < size - 1)
+        {
+            if (sprite->dist[j] < sprite->dist[j + 1])
+            {
+                tmp.x = sprite->dist[j];
+                tmp.y = sprite->order[j];
+                sprite->dist[j] = sprite->dist[j + 1];
+                sprite->order[j] = sprite->order[j + 1];
+                sprite->dist[j + 1] = tmp.x;
+                sprite->order[j + 1] = tmp.y;
+            }
+            j++;
+        }
+        i++;
+    }
+}
+
+void get_sprite_dist(t_all *all, t_sprite *sprite)
+{
+    int i;
+
+    i = 0;
+    sprite->order = malloc(sizeof(int) * all->sprite_num);
+    sprite->dist = malloc(sizeof(int) * all->sprite_num);
+    while (i < all->sprite_num)
+    {
+        sprite->order[i] = i;
+        sprite->dist[i] = hypot(all->pos.x - all->s_pos[i].x, all->pos.y - all->s_pos[i].y);
+        i++;
+    }
+    sort_sprite(sprite, all->sprite_num);
+}
+
+void get_pos_x(t_all *all, t_sprite *s, int i)
+{
+    t_pos pos;
+    double inv_det;
+
+    pos.x = all->s_pos[s->order[i]].x - all->pos.x;
+    pos.y = all->s_pos[s->order[i]].y - all->pos.y;
+    inv_det = 1.0 / (all->plane.x * all->dir.y - all->dir.x * all->plane.y);
+    s->transform.x = inv_det * (all->dir.y * pos.x - all->dir.x * pos.y);
+    s->transform.y = inv_det * (-all->plane.y * pos.x + all->plane.x * pos.y);
+    s->pos_x = (int)((all->win.x / 2) * (1 + s->transform.x / s->transform.y));
+}
+
+void init_sprite(t_all *all, t_sprite *s, int i)
+{
+    int tmp;
+    
+    get_pos_x(all, s, i);
+	//int vMoveScreen = (int)(vMove / transformY);
+    s->height = (int)fabs(all->win.y / s->transform.y) / 1; // 1 테스트 해보기
+    tmp = -s->height / 2 + all->win.y / 2; // + movescreen
+    s->start.y = tmp < 0 ? 0 : tmp;
+    tmp = s->height / 2 + all->win.y / 2; //  + movescreen
+    s->end.y = tmp >= all->win.y ? all->win.y - 1 : tmp;
+    s->width = (int)fabs(all->win.y / s->transform.y); // /udiv
+    tmp = -s->width / 2 + s->pos_x;
+    s->start.x = tmp < 0 ? 0 : tmp;
+    tmp = s->width / 2 + s->pos_x;
+    s->end.x = tmp >= all->win.x ? all->win.x - 1 : tmp;
+}
+
+void add_to_buf_spr(t_all *all, t_sprite *s, int i)
+{
+    int x;
+    int y;
+    int d;
+    int color;
+
+    x = s->start.x;
+    while (x < s->end.x)
+    {
+        y = s->start.y;
+        s->tex.x = (int)((256 * (x - (-s->width / 2 + s->pos_x)) * texWidth / s->width) / 256);
+        if (s->transform.y > 0 && x > 0 && x < all->win.x && s->transform.y < all->z_buf[x])
+            while (y < s->end.y)
+            {
+                d = y * 256 - all->win.y * 128 + s->height * 128;
+                s->tex.y = ((d * texHeight) / s->height) / 256;
+                color = all->texture[all->tex_num][texWidth * s->tex.y + s->tex.x];
+                if ((color & 0x00FFFFFF) != 0)
+                    all->buf[y][x] = color;
+                y++; 
+            }
+        x++;
+    }
+}
+
+void sprite(t_all *all)
+{
+    int i;
+    t_sprite sprite;
+
+    get_sprite_dist(all, &sprite);
+    i = 0;
+    while (i < all->sprite_num)
+    {
+        init_sprite(all, &sprite, i);
+        add_to_buf_spr(all, &sprite, i);
+        i++;
+    }
+}
+
 void ray_casting(t_all *all) 
 {
     horizon(all);
     vertical(all);
-    //sprite(all);
+    sprite(all);
 }

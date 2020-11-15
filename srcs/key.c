@@ -1,6 +1,7 @@
 #include "../includes/cub3d.h"
 
 void move(int key, t_all *all) {
+    //printf("%d\n", (int)(all->pos.x + all->dir.x * MOVE_SPEED));
     if (key == W)
     {
         if (!all->map.map[(int)(all->pos.x + all->dir.x * MOVE_SPEED)]

@@ -130,6 +130,9 @@ void mem_alloc(t_all *all) {
         }
         y++;
     }
+
+    all->s_pos = malloc(sizeof(t_pos) * all->sprite_num);
+    all->z_buf = malloc(sizeof(int) * all->win.x);
 }
 
 int	worldMap[24][24] =
@@ -177,6 +180,7 @@ void init() {
     all.win.y = 480;
     all.img.x = all.win.x;
     all.img.y = all.win.y;
+    all.sprite_num = 1;
     mem_alloc(&all);
 
     for (int i = 0; i < 24; i++) {
@@ -184,6 +188,9 @@ void init() {
             all.map.map[i][j] = worldMap[i][j];
         }
     }
+    all.s_pos[0].x = 20.5;
+    all.s_pos[0].y = 11.5;
+    all.tex_num = 10;
     cubed(&all);
 }
 

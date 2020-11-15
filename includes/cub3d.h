@@ -59,12 +59,6 @@ typedef struct s_dir
     double y;
 } t_dir;
 
-typedef struct s_plane
-{
-    double x;
-    double y;
-} t_plane;
-
 typedef struct s_map
 {
     int x;
@@ -79,6 +73,32 @@ typedef struct s_win
     int y;
 } t_win;
 
+// typedef struct s_sprite
+// {
+//     t_pos pos;
+
+// }   t_sprite;
+typedef struct s_pair
+{
+    int x;
+    int y;
+} t_pair;
+
+typedef struct s_sprite
+{
+    int *order;
+    int width;
+    int height;
+    int pos_x;
+    double *dist;
+    t_pair tex;
+    t_pair start;
+    t_pair end;
+    t_pos transform;
+    //t_pos pos;
+}   t_sprite;
+
+
 typedef struct s_all
 {
     void *mlx;
@@ -86,19 +106,16 @@ typedef struct s_all
     t_img img;
     t_pos pos;
     t_dir dir;
-    t_plane plane;
+    t_dir plane;
     int **buf;
     int **texture;
     int *z_buf;
+    int tex_num;
     t_map map;
-
+    int sprite_num;
+    t_pos *s_pos;
 } t_all;
 
-typedef struct s_pair
-{
-    int x;
-    int y;
-} t_pair;
 
 typedef struct s_ver
 {
