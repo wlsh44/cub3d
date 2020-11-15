@@ -32,7 +32,7 @@ void strafe(int key, t_all *all) {
         all->dir.y = tmp * sin(ROT_SPEED) + all->dir.y * cos(ROT_SPEED);
         tmp = all->plane.x;
         all->plane.x = all->plane.x * cos(ROT_SPEED) - all->plane.y * sin(ROT_SPEED);
-        all->plane.y = all->plane.y * sin(ROT_SPEED) + all->plane.y * cos(ROT_SPEED);
+        all->plane.y = tmp * sin(ROT_SPEED) + all->plane.y * cos(ROT_SPEED);
     }
     if (key == RIGHT)
     {
@@ -40,7 +40,7 @@ void strafe(int key, t_all *all) {
         all->dir.y = tmp * sin(-ROT_SPEED) + all->dir.y * cos(-ROT_SPEED);
         tmp = all->plane.x;
         all->plane.x = all->plane.x * cos(-ROT_SPEED) - all->plane.y * sin(-ROT_SPEED);
-        all->plane.y = all->plane.y * sin(-ROT_SPEED) + all->plane.y * cos(-ROT_SPEED);
+        all->plane.y = tmp * sin(-ROT_SPEED) + all->plane.y * cos(-ROT_SPEED);
     }
 }
 
