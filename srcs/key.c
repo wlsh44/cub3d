@@ -1,7 +1,7 @@
 #include "../includes/cub3d.h"
 
 void move(int key, t_all *all) {
-    //printf("%d\n", (int)(all->pos.x + all->dir.x * MOVE_SPEED));
+    //printf("%f\n", all->dir.x * all->plane.x);
     if (key == W)
     {
         if (!all->map.map[(int)(all->pos.x + all->dir.x * MOVE_SPEED)]
@@ -19,6 +19,24 @@ void move(int key, t_all *all) {
         if (!all->map.map[(int)all->pos.x]
             [(int)(all->pos.y - all->dir.y * MOVE_SPEED)])
             all->pos.y -= all->dir.y * MOVE_SPEED;
+    }
+	if (key == A)
+    {
+        if (!all->map.map[(int)(all->pos.x - all->dir.y * MOVE_SPEED)]
+            [(int)all->pos.y])
+            all->pos.x -= all->dir.y * MOVE_SPEED;
+        if (!all->map.map[(int)all->pos.x]
+            [(int)(all->pos.y + all->dir.x * MOVE_SPEED)])
+            all->pos.y += all->dir.x * MOVE_SPEED;
+    }
+    if (key == D)
+    {
+        if (!all->map.map[(int)(all->pos.x + all->dir.y * MOVE_SPEED)]
+            [(int)all->pos.y])
+            all->pos.x += all->dir.y * MOVE_SPEED;
+        if (!all->map.map[(int)all->pos.x]
+            [(int)(all->pos.y - all->dir.x * MOVE_SPEED)])
+            all->pos.y -= all->dir.x * MOVE_SPEED;
     }
 }
 
@@ -53,7 +71,7 @@ void closed(t_all *all)
 }
 
 int key_press(int key, t_all *all) {
-    if (key == W || key == S)
+    if (key == W || key == S || key == A || key == D)
         move(key, all);
     else if (key == LEFT || key == RIGHT)
         strafe(key, all);

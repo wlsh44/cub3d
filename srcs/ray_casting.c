@@ -51,7 +51,6 @@ void add_to_buf_hor(t_all *all, t_pos *d, t_pos *floor, int y)
 void horizon(t_all *all)
 {
     int y;
-    int color;
     t_pos d;
     t_pos floor;
 
@@ -134,7 +133,6 @@ void init_add_to_buf(t_all *all, t_ver *v)
 void add_to_buf_ver(t_all *all, t_ver *v, int x)
 {
     int y;
-    int color;
 
     init_add_to_buf(all, v);
     y = v->start;
@@ -232,6 +230,7 @@ void get_sprite_dist(t_all *all, t_sprite *sprite)
         i++;
     }
     sort_sprite(sprite, all->sprite_num);
+
 }
 
 void get_pos_x(t_all *all, t_sprite *s, int i)
@@ -265,7 +264,7 @@ void init_sprite(t_all *all, t_sprite *s, int i)
     s->end.x = tmp >= all->win.x ? all->win.x - 1 : tmp;
 }
 
-void add_to_buf_spr(t_all *all, t_sprite *s, int i)
+void add_to_buf_spr(t_all *all, t_sprite *s)
 {
     int x;
     int y;
@@ -291,6 +290,12 @@ void add_to_buf_spr(t_all *all, t_sprite *s, int i)
     }
 }
 
+void end_spr(t_sprite *s)
+{
+	free(s->order);
+	free(s->dist);
+}
+
 void sprite(t_all *all)
 {
     int i;
@@ -301,9 +306,10 @@ void sprite(t_all *all)
     while (i < all->sprite_num)
     {
         init_sprite(all, &sprite, i);
-        add_to_buf_spr(all, &sprite, i);
+        add_to_buf_spr(all, &sprite);
         i++;
     }
+	end_spr(&sprite);
 }
 
 void ray_casting(t_all *all) 

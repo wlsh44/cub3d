@@ -5,11 +5,13 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror
 
-NAME = cub3d
+NAME = cub3D
 
 SRC = cub3d.c \
 		key.c \
-		ray_casting.c
+		ray_casting.c \
+		parse.c \
+		gnl.c
 
 #DIR_SRCS = ./srcs/
 

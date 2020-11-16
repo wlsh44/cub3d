@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #define W 13
 #define A 0
@@ -64,6 +65,7 @@ typedef struct s_map
     int x;
     int y;
     int **map;
+	char tmp[50][50];
 } t_map;
 
 typedef struct s_win
@@ -78,6 +80,7 @@ typedef struct s_win
 //     t_pos pos;
 
 // }   t_sprite;
+
 typedef struct s_pair
 {
     int x;
@@ -116,7 +119,6 @@ typedef struct s_all
     t_pos *s_pos;
 } t_all;
 
-
 typedef struct s_ver
 {
     t_dir dir;
@@ -138,4 +140,9 @@ typedef struct s_ver
 int key_press(int key, t_all *all);
 void ray_casting(t_all *all);
 
+char *get_line(char *save);
+void parse(t_all *all, char *file);
+char *save_trim(char *save);
+char *buf_join(char *save, char *buf);
+int newline_check(char *save, int read_size);
 #endif
