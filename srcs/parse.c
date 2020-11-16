@@ -1,4 +1,4 @@
-#include "cub3d.h"
+#include "../includes/cub3d.h"
 
 int		get_next_line(int fd, char **line)
 {
@@ -79,24 +79,28 @@ int get_map(t_all *all, char *line)
 	int j;
 
 	i = 0;
-		printf("%s\n", line);
-
+		//printf("%s\n", line);
+	j = 0;
 	if (line == NULL)
 		return (-1);
 	while (line[i] == '\t')
 	{
-		j = 0;
-		while (j < 4)
+		all->map.tmp[all->map.y][j++] = ' ';
+		while (j % 4 != 0)
 			all->map.tmp[all->map.y][j++] = ' ';
 		i++;
 	}
 	while (line[i] != 0)
 	{
-		all->map.tmp[all->map.y][i] = line[i];
+		all->map.tmp[all->map.y][j] = line[i];
 		i++;
+		j++;
 	}
-	if (all->map.x < i)
-		all->map.x = i;
+	//while (j < all->map.x)
+	all->map.tmp[all->map.y][j] = 0;
+	if (all->map.x < j)
+		all->map.x = j;
+	all->map.y++;
 	return (0);
 }
 
@@ -146,11 +150,107 @@ int parse_line(t_all *all, char *line)
 	return (errno);
 }
 
+void map_alloc(t_all *all)
+{
+	int y;
+	int x;
+	y = 0;
+	all->map.map = malloc(sizeof(int *) * all->map.y);
+	while (y < all->map.y)
+	{
+		x = 0;
+		all->map.map[y] = malloc(sizeof(int) * all->map.x);
+		while (x < all->map.x)
+		{
+			if (all->map.tmp[y][x] == ' ' || all->map.tmp[y][x] == '1')
+				all->map.map[y][x] = 1;
+			else
+				all->map.map[y][x] = 0;
+			x++;
+		}
+		y++;
+	}
+}
+
+int check_srround(t_all *all, int y, int x)
+{
+	if (y == 0 && all->map.tmp[y + 1][x] == '0')
+			return (0);
+	else if (y == all->map.y - 1 && all->map.tmp[y - 1][x] == '0')
+			return (0);
+	else if (all->map.tmp[y + 1][x] == '0' ||
+			all->map.tmp[y - 1][x] == '0')
+			return (0);
+	//printf("in\n");
+	if (x == 0 && all->map.tmp[y][x + 1] == '0')
+			return (0);
+	else if (x == all->map.x - 1 && all->map.tmp[y][x - 1] == '0')
+			return (0);
+	else if (all->map.tmp[y][x + 1] == '0' ||
+			all->map.tmp[y][x - 1] == '0')
+			return (0);
+	return (1);
+}
+
+int check_map(t_all *all)
+{
+	int flag;
+	int i;
+	int j;
+
+	i = 0;
+	flag = 0;
+	//printf("%d %d\n", all->map.y, all->map.x);
+	while (i < all->map.y)
+	{
+		j = 0;
+		//printf("%d", i);
+		while (j < all->map.x)
+		{
+	//		printf(" %d\n", j);
+			if (all->map.tmp[i][j] == 'W' || all->map.tmp[i][j] == 'N'
+				|| all->map.tmp[i][j] == 'S' || all->map.tmp[i][j] == 'E')
+				{
+					all->pos.y = i;
+					all->pos.x = j;
+					flag = 1;
+				}
+			else if (all->map.tmp[i][j] == ' ' && !check_srround(all, i, j))
+					return (-1);
+			else if (all->map.tmp[i][j] == '2')
+			{
+				all->s_pos[all->sprite_num].y = i;
+				all->s_pos[all->sprite_num++].x = j;
+			}
+			j++;
+		}
+		i++;
+	}
+	if (flag == 0)
+		return (-1);
+	return (0);
+}
+
+int map_parse(t_all *all)
+{
+	if (check_map(all))
+		return (-1);
+	map_alloc(all);
+	// for (int i = 0; i < all->map.y; i++) 
+	// {
+	// 	for (int j = 0; j < all->map.x; j++)
+	// 		printf("%d", all->map.map[i][j]);
+	// 	printf("\n");
+	// }
+	return (0);
+}
+
 void parse(t_all *all, char *file)
 {
 	int fd;
 	int res;
 	char *line;
+	double tmp;
 
 	res = 1;
 	if ((fd = open(file, O_RDONLY)) == -1)
@@ -163,6 +263,16 @@ void parse(t_all *all, char *file)
 			res = -1;
 		free(line);
 	}
+	//printf("asdf\n");
 	close(fd);
+	// 	for (int i = 0; i < all->map.y; i++) 
+	// {
+	// 	for (int j = 0; j < all->map.x; j++)
+	// 		printf("%c", all->map.tmp[i][j]);
+	// 	printf("\n");
+	// }
 	map_parse(all);
+	tmp = all->pos.x;
+	all->pos.x = all->pos.y;
+	all->pos.y = tmp;
 }

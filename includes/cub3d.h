@@ -28,8 +28,8 @@
 #define MOVE_SPEED 0.05
 #define ROT_SPEED 0.05
 
-#define FLOOR 5
-#define CEILING 6
+#define FLOOR 4
+#define CEILING 5
 
 typedef struct	s_img
 {
@@ -75,6 +75,7 @@ typedef struct s_win
     int y;
 } t_win;
 
+
 // typedef struct s_sprite
 // {
 //     t_pos pos;
@@ -116,7 +117,7 @@ typedef struct s_all
     int tex_num;
     t_map map;
     int sprite_num;
-    t_pos *s_pos;
+    t_pos s_pos[30];
 } t_all;
 
 typedef struct s_ver

@@ -114,7 +114,7 @@ void mem_alloc(t_all *all) {
     //     }
     //     y++;
     // }
-    all->s_pos = malloc(sizeof(t_pos) * all->sprite_num);
+    //all->s_pos = malloc(sizeof(t_pos) * all->sprite_num);
     all->z_buf = malloc(sizeof(int) * all->win.x);
 }
 
@@ -183,7 +183,7 @@ void cub3d(char *file) {
     all.win.y = 480;
     all.img.x = all.win.x;
     all.img.y = all.win.y;
-    all.sprite_num = 1;
+    all.sprite_num = 0;
     mem_alloc(&all);
     all.mlx = mlx_init();
 
@@ -192,9 +192,9 @@ void cub3d(char *file) {
     //         all.map.map[i][j] = worldMap[i][j];
     //     }
     // }
-    all.s_pos[0].x = 20.5;
-    all.s_pos[0].y = 11.5;
-    all.tex_num = 10;
+    // all.s_pos[0].x = 20.5;
+    // all.s_pos[0].y = 11.5;
+    //all.tex_num = 10;
 	parse(&all, file);
     cubed(&all);
 	//end(&all);

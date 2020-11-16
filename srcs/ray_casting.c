@@ -138,7 +138,7 @@ void add_to_buf_ver(t_all *all, t_ver *v, int x)
     y = v->start;
     while (y < v->end)
     {
-        //printf("%d\n", v->tex_num);
+        //printf("tex %d\n", v->tex_num);
         v->tex.y = (int)v->tex_pos & (texHeight - 1);
         v->tex_pos += v->ratio;
         all->buf[y][x] = all->texture[v->tex_num][texHeight * v->tex.y + v->tex.x];
@@ -167,6 +167,7 @@ void dda_algorithm(t_all *all, t_ver *v)
             v->pos.y += v->step.y;
             v->wall = 'y';
         }
+        //printf("%d %d\n", v->pos.x, v->pos.y);
         if (all->map.map[v->pos.x][v->pos.y] > 0)
              hit = 1;
     }
@@ -316,5 +317,5 @@ void ray_casting(t_all *all)
 {
     horizon(all);
     vertical(all);
-    sprite(all);
+    //sprite(all);
 }
