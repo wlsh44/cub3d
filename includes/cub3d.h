@@ -13,7 +13,8 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <mlx.h>
+//# include <mlx.h>
+# include "../mlxopengl/mlx.h"
 # include <math.h>
 # include <string.h>
 # include <stdio.h>
@@ -91,11 +92,11 @@ typedef struct	s_pair
 
 typedef struct	s_sprite
 {
-	int			order[10];
+	int			order[30];
 	int			width;
 	int			height;
 	int			pos_x;
-	double		dist[10];
+	double		dist[30];
 	t_pair		tex;
 	t_pair		start;
 	t_pair		end;
@@ -110,7 +111,7 @@ typedef struct	s_all
 	t_dir		dir;
 	t_dir		plane;
 	t_map		map;
-	t_pos		s_pos[10];
+	t_pos		s_pos[30];
 	void		*mlx;
 	int			**buf;
 	int			**texture;

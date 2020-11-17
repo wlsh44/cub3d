@@ -66,19 +66,25 @@ void	map_alloc(t_all *all)
 
 int		check_srround(t_all *all, int y, int x)
 {
-	if (y == 0 && all->map.tmp[y + 1][x] == '0')
+	if (y == 0 && (all->map.tmp[y + 1][x] == '0' ||
+		all->map.tmp[y + 1][x] == '2'))
 		return (0);
-	else if (y == all->map.y - 1 && all->map.tmp[y - 1][x] == '0')
+	else if (y == all->map.y - 1 && (all->map.tmp[y - 1][x] == '0' ||
+								all->map.tmp[y - 1][x] == '2'))
 		return (0);
 	else if ((y != 0 && y != all->map.y - 1) &&
-			(all->map.tmp[y + 1][x] == '0' || all->map.tmp[y - 1][x] == '0'))
+			(all->map.tmp[y + 1][x] == '0' || all->map.tmp[y - 1][x] == '0' ||
+			all->map.tmp[y + 1][x] == '2' || all->map.tmp[y - 1][x] == '2'))
 		return (0);
-	if (x == 0 && all->map.tmp[y][x + 1] == '0')
+	if (x == 0 && (all->map.tmp[y][x + 1] == '0' ||
+					all->map.tmp[y][x + 1] == '2'))
 		return (0);
-	else if (x == all->map.x - 1 && all->map.tmp[y][x - 1] == '0')
+	else if (x == all->map.x - 1 && (all->map.tmp[y][x - 1] == '0' ||
+									all->map.tmp[y][x - 1] == '2'))
 		return (0);
 	else if ((x != 0 && x != all->map.x - 1) &&
-			(all->map.tmp[y][x + 1] == '0' || all->map.tmp[y][x - 1] == '0'))
+			(all->map.tmp[y][x + 1] == '0' || all->map.tmp[y][x - 1] == '0' ||
+			all->map.tmp[y][x + 1] == '2' || all->map.tmp[y][x - 1] == '2'))
 		return (0);
 	return (1);
 }

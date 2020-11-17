@@ -114,6 +114,7 @@ void	parse(t_all *all, char *file)
 	close(fd);
 	if (!check_last_border(all) || map_parse(all))
 		print_error(-2);
+	write(1, "1", 1);
 	tmp = all->pos.x;
 	all->pos.x = all->pos.y;
 	all->pos.y = tmp;
