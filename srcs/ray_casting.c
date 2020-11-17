@@ -108,6 +108,38 @@ void get_wall_dist(t_all *all, t_ver *v)
         v->wall_dist = (v->pos.y - all->pos.y + (1 - v->step.y) / 2) / v->dir.y;
 }
 
+void set_tex_num(t_all *all, t_ver *v)
+{
+	if (v->step.x == 1 && v->step.y == 1)
+	{
+		if (v->wall == 'x')
+			v->tex_num = 2;//W
+		else
+			v->tex_num = 1;//S
+	}
+	else if (v->step.x == 1 && v->step.y == -1)
+	{
+		if (v->wall == 'x')
+			v->tex_num = 2;//W
+		else
+			v->tex_num = 0;//N
+	}
+	else if (v->step.x == -1 && v->step.y == 1)
+	{
+		if (v->wall == 'x')
+			v->tex_num = 3;//E
+		else
+			v->tex_num = 1;//S
+	}
+	else if (v->step.x == -1 && v->step.y == -1)
+	{
+		if (v->wall == 'x')
+			v->tex_num = 3;//E
+		else
+			v->tex_num = 0;//N
+	}
+}
+
 void init_add_to_buf(t_all *all, t_ver *v)
 {
     int tmp;
@@ -118,7 +150,8 @@ void init_add_to_buf(t_all *all, t_ver *v)
     v->start = tmp < 0 ? 0 : tmp;
     tmp = v->line_height / 2 + all->win.y / 2;
     v->end = tmp >= all->win.y ? all->win.y - 1 : tmp;
-    v->tex_num = all->map.map[v->pos.x][v->pos.y] - 1; // ..?
+	set_tex_num(all, v);
+    //v->tex_num = all->map.map[v->pos.x][v->pos.y] - 1; // ..?
     wall_x = v->wall == 'x' ? all->pos.y + v->wall_dist * v->dir.y : all->pos.x + v->wall_dist * v->dir.x;
     wall_x -= floor(wall_x);
     v->tex.x = (int)(wall_x * (double)texWidth);
@@ -148,6 +181,8 @@ void add_to_buf_ver(t_all *all, t_ver *v, int x)
     all->z_buf[x] = v->wall_dist;
 }
 
+
+
 void dda_algorithm(t_all *all, t_ver *v)
 {
     int hit;
@@ -171,6 +206,7 @@ void dda_algorithm(t_all *all, t_ver *v)
         if (all->map.map[v->pos.x][v->pos.y] > 0)
              hit = 1;
     }
+		//set_tex_num(all, v);
     get_wall_dist(all, v);
 }
 
@@ -189,6 +225,16 @@ void vertical(t_all *all)
         x++;
     }
 }
+
+
+
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+
+
 
 void sort_sprite(t_sprite *sprite, int size)
 {
@@ -282,7 +328,7 @@ void add_to_buf_spr(t_all *all, t_sprite *s)
             {
                 d = y * 256 - all->win.y * 128 + s->height * 128;
                 s->tex.y = ((d * texHeight) / s->height) / 256;
-                color = all->texture[all->tex_num][texWidth * s->tex.y + s->tex.x];
+                color = all->texture[6][texWidth * s->tex.y + s->tex.x];
                 if ((color & 0x00FFFFFF) != 0)
                     all->buf[y][x] = color;
                 y++; 
@@ -317,5 +363,5 @@ void ray_casting(t_all *all)
 {
     horizon(all);
     vertical(all);
-    //sprite(all);
+    sprite(all);
 }
