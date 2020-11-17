@@ -59,10 +59,9 @@ int		get_color(t_all *all, char *line, int num)
 	g = ft_atoi(line, &i);
 	i++;
 	b = ft_atoi(line, &i);
-	i++;
 	if (line[i] != '\0' || r > 255 || g > 255 || b > 255)
 		return (-4);
-	set_color(all, r * 256 * 256 + g * 256 + b, num);
+	set_color(all, num, r * 256 * 256 + g * 256 + b);
 	return (0);
 }
 
@@ -107,6 +106,7 @@ void	parse(t_all *all, char *file)
 	while (res == 1)
 	{
 		res = get_next_line(fd, &line);
+		//printf("%s\n", line);
 		if (parse_line(all, line) == -1)
 			res = -1;
 		free(line);
