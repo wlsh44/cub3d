@@ -47,3 +47,61 @@ int		check_border(t_all *all, char *line)
 		return (0);
 	return (1);
 }
+
+void	position1(t_all *all, char pos)
+{
+	double	tmp;
+
+	tmp = all->dir.x;
+	if (pos == 'N')
+	{
+		all->dir.x = all->dir.x * cos(A) - all->dir.y * sin(A);
+		all->dir.y = tmp * sin(A) +
+						all->dir.y * cos(A);
+		tmp = all->plane.x;
+		all->plane.x = all->plane.x * cos(A) -
+						all->plane.y * sin(A);
+		all->plane.y = tmp * sin(A) + all->plane.y * cos(A);
+	}
+	if (pos == 'W')
+	{
+		all->dir.x = all->dir.x * cos(M_PI / 2 + A) -
+						all->dir.y * sin(M_PI / 2 + A);
+		all->dir.y = tmp * sin(M_PI / 2 + A) +
+						all->dir.y * cos(M_PI / 2 + A);
+		tmp = all->plane.x;
+		all->plane.x = all->plane.x * cos(M_PI / 2 + A) -
+						all->plane.y * sin(M_PI / 2 + A);
+		all->plane.y = tmp * sin(M_PI / 2 + A) +
+						all->plane.y * cos(M_PI / 2 + A);
+	}
+}
+
+void	position2(t_all *all, char pos)
+{
+	double	tmp;
+
+	tmp = all->dir.x;
+	if (pos == 'E')
+	{
+		all->dir.x = all->dir.x * cos(-M_PI / 2 + A) -
+		all->dir.y * sin(-M_PI / 2 + A);
+		all->dir.y = tmp * sin(-M_PI / 2 + A) +
+						all->dir.y * cos(-M_PI / 2 + A);
+		tmp = all->plane.x;
+		all->plane.x = all->plane.x * cos(-M_PI / 2 + A) -
+						all->plane.y * sin(-M_PI / 2 + A);
+		all->plane.y = tmp * sin(-M_PI / 2 + A) +
+						all->plane.y * cos(-M_PI / 2 + A);
+	}
+	if (pos == 'S')
+	{
+		all->dir.x = all->dir.x * cos(M_PI + A) -
+						all->dir.y * sin(M_PI + A);
+		all->dir.y = tmp * sin(M_PI + A) + all->dir.y * cos(M_PI + A);
+		tmp = all->plane.x;
+		all->plane.x = all->plane.x * cos(M_PI + A) -
+						all->plane.y * sin(M_PI + A);
+		all->plane.y = tmp * sin(M_PI + A) + all->plane.y * cos(M_PI + A);
+	}
+}

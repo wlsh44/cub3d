@@ -30,12 +30,13 @@ int		get_map_tmp(t_all *all, char *line)
 			all->map.tmp[all->map.y][j++] = ' ';
 		i++;
 	}
-	while (line[i] != 0)
+	while (line[i] != 0 && j < 80)
 		all->map.tmp[all->map.y][j++] = line[i++];
 	all->map.tmp[all->map.y][j] = 0;
 	if (all->map.x < j)
 		all->map.x = j;
-	all->map.y++;
+	if (++all->map.y == 80 || all->map.x == 80)
+		print_error(-2);
 	return (0);
 }
 

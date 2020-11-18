@@ -23,21 +23,23 @@ int		get_texture(t_all *all, char *line, int i)
 
 int		get_win(t_all *all, char *line)
 {
-	int	i;
-	int	width;
-	int	height;
+	int		i;
+	int		width;
+	int		height;
+	t_pair	win;
 
 	i = 0;
 	width = ft_atoi(line, &i);
 	height = ft_atoi(line, &i);
+	mlx_get_screen_size(all->mlx, &win.x, &win.y);
 	if (width <= 0 || height <= 0)
 		return (-3);
 	all->win.x = width;
 	all->win.y = height;
-	if (all->win.x > 2560)
-		all->win.x = 1920;
-	if (all->win.y > 1400)
-		all->win.y = 1080;
+	if (all->win.x > win.x)
+		all->win.x = win.x;
+	if (all->win.y > win.y)
+		all->win.y = win.y;
 	all->img.x = all->win.x;
 	all->img.y = all->win.y;
 	return (0);
@@ -46,7 +48,6 @@ int		get_win(t_all *all, char *line)
 int		get_color(t_all *all, char *line, int num)
 {
 	int	i;
-	int	j;
 	int	r;
 	int	g;
 	int	b;

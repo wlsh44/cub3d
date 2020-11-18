@@ -1,6 +1,6 @@
 CC = gcc
 
-FLAGS = -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -fsanitize=address
 
 NAME = cub3D
 
@@ -29,10 +29,17 @@ SRCS = $(addprefix $(DIR_SRCS), $(SRC))
 
 OBJS = $(SRCS:.c=.o)
 
+MLX				= libmlx.dylib
+
 all: $(NAME)
 
-$(NAME): $(OBJS)
-		$(CC) $(FLAGS) -I $(HEADER) -lmlx -framework OpenGL -framework AppKit $(OBJS) -o $(NAME)
+$(NAME): $(MLX) $(OBJS)
+		#$(CC) $(FLAGS) -I $(HEADER) -lmlx -framework $(OBJS) -o $(NAME)
+		$(CC) $(FLAGS) -I $(HEADER) -lmlx -framework OpenGL -framework AppKit libmlx.dylib $(OBJS) -o $(NAME)
+
+$(MLX):
+				@$(MAKE) -C mlx
+				@mv minilibx_mms_20200219/$(MLX) .
 
 .c.o:
 		$(CC) $(FLAGS) -I $(HEADER) -c $< -o $@

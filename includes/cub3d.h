@@ -13,7 +13,7 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <mlx.h>
+# include "mlx.h"
 # include <math.h>
 # include <string.h>
 # include <stdio.h>
@@ -38,6 +38,8 @@
 
 # define FLOOR 4
 # define CEILING 5
+
+# define A  0.01
 
 typedef struct	s_img
 {
@@ -188,5 +190,8 @@ void			add_to_buf_hor(t_all *all, t_pos *d, t_pos *floor, int y);
 
 int				check_last_border(t_all *all);
 int				check_border(t_all *all, char *line);
+
+void			position1(t_all *all, char pos);
+void			position2(t_all *all, char pos);
 
 #endif
