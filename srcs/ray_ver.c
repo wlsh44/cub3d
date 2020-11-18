@@ -12,24 +12,16 @@
 
 #include "../includes/cub3d.h"
 
-void	set_tex_num(t_ver *v)
+void	set_tex_num(t_all *all, t_ver *v)
 {
-	if (v->step.x == 1 && v->step.y == 1)
-	{
-		v->tex_num = v->wall == 'x' ? 2 : 1;
-	}
-	else if (v->step.x == 1 && v->step.y == -1)
-	{
-		v->tex_num = v->wall == 'x' ? 2 : 0;
-	}
-	else if (v->step.x == -1 && v->step.y == 1)
-	{
-		v->tex_num = v->wall == 'x' ? 3 : 1;
-	}
-	else if (v->step.x == -1 && v->step.y == -1)
-	{
-		v->tex_num = v->wall == 'x' ? 3 : 0;
-	}
+	if (v->wall == 'x' && (double)v->pos.x < all->pos.x)
+		v->tex_num = 1;
+	else if (v->wall == 'x' && (double)v->pos.x >= all->pos.x)
+		v->tex_num = 0;
+	else if (v->wall == 'y' && (double)v->pos.y < all->pos.y)
+		v->tex_num = 3;
+	else
+		v->tex_num = 2;
 }
 
 void	init_add_to_buf(t_all *all, t_ver *v)
@@ -42,7 +34,7 @@ void	init_add_to_buf(t_all *all, t_ver *v)
 	v->start = tmp < 0 ? 0 : tmp;
 	tmp = v->line_height / 2 + all->win.y / 2;
 	v->end = tmp >= all->win.y ? all->win.y - 1 : tmp;
-	set_tex_num(v);
+	set_tex_num(all, v);
 	wall_x = v->wall == 'x' ? all->pos.y + v->wall_dist * v->dir.y :
 							all->pos.x + v->wall_dist * v->dir.x;
 	wall_x -= floor(wall_x);
