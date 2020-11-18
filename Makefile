@@ -1,6 +1,6 @@
 CC = gcc
 
-FLAGS = -g
+FLAGS = -fsanitize=address
 
 NAME = cub3D
 
@@ -32,7 +32,7 @@ OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-		$(CC) $(FLAGS) -I $(HEADER) -L mlxopengl -lmlx -framework OpenGL -framework AppKit $(OBJS) -o $(NAME)
+		$(CC) $(FLAGS) -I $(HEADER) -lmlx -framework OpenGL -framework AppKit $(OBJS) -o $(NAME)
 
 .c.o:
 		$(CC) $(FLAGS) -I $(HEADER) -c $< -o $@

@@ -76,6 +76,6 @@ int		main(int argc, char *argv[])
 	else if (argc == 2 && namecheck(argv[1], "cub"))
 		cub3d(argv[1], 0);
 	else
-		write(2, "Error : Invalid arguments\n", 26);
+		print_error(-5);
 	return (0);
 }

@@ -35,9 +35,9 @@ int		get_win(t_all *all, char *line)
 	all->win.x = width;
 	all->win.y = height;
 	if (all->win.x > 2560)
-		all->win.x = 2560;
+		all->win.x = 1920;
 	if (all->win.y > 1400)
-		all->win.y = 1400;
+		all->win.y = 1080;
 	all->img.x = all->win.x;
 	all->img.y = all->win.y;
 	return (0);
@@ -106,7 +106,6 @@ void	parse(t_all *all, char *file)
 	while (res == 1)
 	{
 		res = get_next_line(fd, &line);
-		//printf("%s\n", line);
 		if (parse_line(all, line) == -1)
 			res = -1;
 		free(line);
@@ -114,7 +113,6 @@ void	parse(t_all *all, char *file)
 	close(fd);
 	if (!check_last_border(all) || map_parse(all))
 		print_error(-2);
-	write(1, "1", 1);
 	tmp = all->pos.x;
 	all->pos.x = all->pos.y;
 	all->pos.y = tmp;

@@ -28,5 +28,7 @@ void	print_error(int errno)
 		write(1, "no file\n", 8);
 	else if (errno == -7)
 		write(1, "malloc error\n", 10);
+	else if (errno == -8)
+		write(1, "too many items\n", 15);
 	exit(0);
 }

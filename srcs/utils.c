@@ -75,6 +75,8 @@ int		is_valid_map(t_all *all, int i, int j, int *flag)
 		return (0);
 	else if (all->map.tmp[i][j] == '2')
 	{
+		if (all->sprite_num == 29)
+			print_error(-8);
 		all->s_pos[all->sprite_num].x = i;
 		all->s_pos[all->sprite_num++].y = j;
 		return (1);
