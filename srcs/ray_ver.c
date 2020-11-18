@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d.h"
 
-void	set_tex_num(t_all *all, t_ver *v)
+void	set_tex_num(t_ver *v)
 {
 	if (v->step.x == 1 && v->step.y == 1)
 	{
@@ -42,7 +42,7 @@ void	init_add_to_buf(t_all *all, t_ver *v)
 	v->start = tmp < 0 ? 0 : tmp;
 	tmp = v->line_height / 2 + all->win.y / 2;
 	v->end = tmp >= all->win.y ? all->win.y - 1 : tmp;
-	set_tex_num(all, v);
+	set_tex_num(v);
 	wall_x = v->wall == 'x' ? all->pos.y + v->wall_dist * v->dir.y :
 							all->pos.x + v->wall_dist * v->dir.x;
 	wall_x -= floor(wall_x);

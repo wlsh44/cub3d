@@ -39,7 +39,7 @@
 # define FLOOR 4
 # define CEILING 5
 
-# define A  0.01
+# define K  0.01
 
 typedef struct	s_img
 {
@@ -170,7 +170,7 @@ void			set_color(t_all *all, int num, unsigned int color);
 
 void			ray_casting(t_all *all);
 
-void			set_tex_num(t_all *all, t_ver *v);
+void			set_tex_num(t_ver *v);
 void			init_add_to_buf(t_all *all, t_ver *v);
 void			add_to_buf_ver(t_all *all, t_ver *v, int x);
 void			dda_algorithm(t_all *all, t_ver *v);
