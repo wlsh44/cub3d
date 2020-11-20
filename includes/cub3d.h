@@ -167,6 +167,7 @@ int				is_valid_map(t_all *all, int i, int j, int *flag);
 int				get_next_line(int fd, char **line);
 int				load_image(t_all *all, int *texture, char *path, t_img *img);
 void			set_color(t_all *all, int num, unsigned int color);
+int				check_texture(t_all *all);
 
 void			ray_casting(t_all *all);
 

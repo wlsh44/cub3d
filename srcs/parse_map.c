@@ -19,7 +19,7 @@ int		get_map_tmp(t_all *all, char *line)
 
 	i = 0;
 	j = 0;
-	if (line == NULL)
+	if (line == NULL || !check_texture(all))
 		return (-1);
 	if (!check_border(all, line))
 		print_error(-2);

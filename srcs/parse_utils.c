@@ -83,3 +83,16 @@ void	set_color(t_all *all, int num, unsigned int color)
 		i++;
 	}
 }
+
+int		check_texture(t_all *all)
+{
+	int	i;
+
+	i = 0;
+	while (i < 7)
+	{
+		if (all->texture[i] == 0)
+			return (0);
+	}
+	return (1);
+}
