@@ -5,7 +5,7 @@ WE ./textures/wood.xpm
 EA ./textures/greystone.xpm
 
 S ./textures/greenlight.xpm
-F -1,252,23
+F -1
 C ./textures/colorstone.xpm
         1111111111111111111111111
 		1000000000110000000000001

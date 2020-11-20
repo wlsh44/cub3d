@@ -53,12 +53,18 @@ int		get_color(t_all *all, char *line, int num)
 	int	g;
 	int	b;
 
+	if (line[0] == 0)
+		return (-4);
 	if (line[0] == '.')
 		return (get_texture(all, line, num));
 	i = 0;
 	r = ft_atoi(line, &i);
+	if (line[i] != ',' || line[i] == 0)
+		return (-4);
 	i++;
 	g = ft_atoi(line, &i);
+	if (line[i] != ',' || line[i] == 0)
+		return (-4);
 	i++;
 	b = ft_atoi(line, &i);
 	if (line[i] != '\0' || r > 255 || g > 255 || b > 255)

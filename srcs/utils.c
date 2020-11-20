@@ -67,8 +67,8 @@ int		is_valid_map(t_all *all, int i, int j, int *flag)
 			|| all->map.tmp[i][j] == 'S' || all->map.tmp[i][j] == 'E')
 	{
 		position(all, all->map.tmp[i][j]);
-		all->pos.y = i;
-		all->pos.x = j;
+		all->pos.y = i + 0.5;
+		all->pos.x = j + 0.5;
 		(*flag)++;
 		return (1);
 	}

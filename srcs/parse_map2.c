@@ -55,25 +55,25 @@ void	position1(t_all *all, char pos)
 	tmp = all->dir.x;
 	if (pos == 'N')
 	{
-		all->dir.x = all->dir.x * cos(K) - all->dir.y * sin(K);
-		all->dir.y = tmp * sin(K) +
-						all->dir.y * cos(K);
+		all->dir.x = all->dir.x * cos(-K) - all->dir.y * sin(-K);
+		all->dir.y = tmp * sin(-K) +
+						all->dir.y * cos(-K);
 		tmp = all->plane.x;
-		all->plane.x = all->plane.x * cos(K) -
-						all->plane.y * sin(K);
-		all->plane.y = tmp * sin(K) + all->plane.y * cos(K);
+		all->plane.x = all->plane.x * cos(-K) -
+						all->plane.y * sin(-K);
+		all->plane.y = tmp * sin(-K) + all->plane.y * cos(-K);
 	}
 	if (pos == 'W')
 	{
-		all->dir.x = all->dir.x * cos(M_PI / 2 + K) -
-						all->dir.y * sin(M_PI / 2 + K);
-		all->dir.y = tmp * sin(M_PI / 2 + K) +
-						all->dir.y * cos(M_PI / 2 + K);
+		all->dir.x = all->dir.x * cos(M_PI / 2 - K) -
+						all->dir.y * sin(M_PI / 2 - K);
+		all->dir.y = tmp * sin(M_PI / 2 - K) +
+						all->dir.y * cos(M_PI / 2 - K);
 		tmp = all->plane.x;
-		all->plane.x = all->plane.x * cos(M_PI / 2 + K) -
-						all->plane.y * sin(M_PI / 2 + K);
-		all->plane.y = tmp * sin(M_PI / 2 + K) +
-						all->plane.y * cos(M_PI / 2 + K);
+		all->plane.x = all->plane.x * cos(M_PI / 2 - K) -
+						all->plane.y * sin(M_PI / 2 - K);
+		all->plane.y = tmp * sin(M_PI / 2 - K) +
+						all->plane.y * cos(M_PI / 2 - K);
 	}
 }
 
@@ -84,25 +84,25 @@ void	position2(t_all *all, char pos)
 	tmp = all->dir.x;
 	if (pos == 'E')
 	{
-		all->dir.x = all->dir.x * cos(-M_PI / 2 + K) -
-		all->dir.y * sin(-M_PI / 2 + K);
-		all->dir.y = tmp * sin(-M_PI / 2 + K) +
-						all->dir.y * cos(-M_PI / 2 + K);
+		all->dir.x = all->dir.x * cos(-M_PI / 2 - K) -
+		all->dir.y * sin(-M_PI / 2 - K);
+		all->dir.y = tmp * sin(-M_PI / 2 - K) +
+						all->dir.y * cos(-M_PI / 2 - K);
 		tmp = all->plane.x;
-		all->plane.x = all->plane.x * cos(-M_PI / 2 + K) -
-						all->plane.y * sin(-M_PI / 2 + K);
-		all->plane.y = tmp * sin(-M_PI / 2 + K) +
-						all->plane.y * cos(-M_PI / 2 + K);
+		all->plane.x = all->plane.x * cos(-M_PI / 2 - K) -
+						all->plane.y * sin(-M_PI / 2 - K);
+		all->plane.y = tmp * sin(-M_PI / 2 - K) +
+						all->plane.y * cos(-M_PI / 2 - K);
 	}
 	if (pos == 'S')
 	{
-		all->dir.x = all->dir.x * cos(M_PI + K) -
-						all->dir.y * sin(M_PI + K);
-		all->dir.y = tmp * sin(M_PI + K) + all->dir.y * cos(M_PI + K);
+		all->dir.x = all->dir.x * cos(M_PI - K) -
+						all->dir.y * sin(M_PI - K);
+		all->dir.y = tmp * sin(M_PI - K) + all->dir.y * cos(M_PI - K);
 		tmp = all->plane.x;
-		all->plane.x = all->plane.x * cos(M_PI + K) -
-						all->plane.y * sin(M_PI + K);
-		all->plane.y = tmp * sin(M_PI + K) + all->plane.y * cos(M_PI + K);
+		all->plane.x = all->plane.x * cos(M_PI - K) -
+						all->plane.y * sin(M_PI - K);
+		all->plane.y = tmp * sin(M_PI - K) + all->plane.y * cos(M_PI - K);
 	}
 }
 
