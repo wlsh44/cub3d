@@ -66,10 +66,7 @@ int		is_valid_map(t_all *all, int i, int j, int *flag)
 	if (all->map.tmp[i][j] == 'W' || all->map.tmp[i][j] == 'N'
 			|| all->map.tmp[i][j] == 'S' || all->map.tmp[i][j] == 'E')
 	{
-		if (all->map.tmp[i][j] == 'W' || all->map.tmp[i][j] == 'N')
-			position1(all, all->map.tmp[i][j]);
-		else
-			position2(all, all->map.tmp[i][j]);
+		position(all, all->map.tmp[i][j]);
 		all->pos.y = i;
 		all->pos.x = j;
 		(*flag)++;
@@ -85,5 +82,9 @@ int		is_valid_map(t_all *all, int i, int j, int *flag)
 		all->s_pos[all->sprite_num++].y = j;
 		return (1);
 	}
-	return (1);
+	else if (all->map.tmp[i][j] == '0' || all->map.tmp[i][j] == '1' ||
+			all->map.tmp[i][j] == ' ' || all->map.tmp[i][j] == 0)
+		return (1);
+	else
+		return (0);
 }

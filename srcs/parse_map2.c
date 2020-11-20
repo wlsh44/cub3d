@@ -105,3 +105,11 @@ void	position2(t_all *all, char pos)
 		all->plane.y = tmp * sin(M_PI + K) + all->plane.y * cos(M_PI + K);
 	}
 }
+
+void	position(t_all *all, char pos)
+{
+	if (pos == 'W' || pos == 'N')
+		position1(all, pos);
+	else
+		position2(all, pos);
+}

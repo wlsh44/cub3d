@@ -38,6 +38,13 @@ int		main_loop(t_all *all)
 	return (0);
 }
 
+int		mouse_handler(int push)
+{
+	if (push != 1)
+		exit(0);
+	return (1);
+}
+
 void	cubed(t_all *all, int save)
 {
 	all->win.win = mlx_new_window(all->mlx, all->img.x, all->img.y, "cub3D");
@@ -52,5 +59,6 @@ void	cubed(t_all *all, int save)
 	}
 	mlx_loop_hook(all->mlx, &main_loop, all);
 	mlx_hook(all->win.win, KEY_PRESS, 0, &key_press, all);
+	mlx_hook(all->win.win, 17, 0, &mouse_handler, all);
 	mlx_loop(all->mlx);
 }

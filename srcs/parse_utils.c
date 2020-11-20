@@ -84,15 +84,21 @@ void	set_color(t_all *all, int num, unsigned int color)
 	}
 }
 
-int		check_texture(t_all *all)
+void	fill_map_tmp(t_all *all)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	while (i < 7)
+	while (i < all->map.y)
 	{
-		if (all->texture[i] == 0)
-			return (0);
+		j = 0;
+		while (j < all->map.x)
+		{
+			if (all->map.tmp[i][j] == 0)
+				all->map.tmp[i][j] = ' ';
+			j++;
+		}
+		i++;
 	}
-	return (1);
 }

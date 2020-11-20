@@ -14,7 +14,9 @@
 
 void	print_error(int errno)
 {
-	if (errno == -1)
+	if (errno == 0)
+		write(1, "argument error\n", 15);
+	else if (errno == -1)
 		write(1, "file error\n", 11);
 	else if (errno == -2)
 		write(1, "map error\n", 10);

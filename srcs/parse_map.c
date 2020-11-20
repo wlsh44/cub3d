@@ -19,7 +19,7 @@ int		get_map_tmp(t_all *all, char *line)
 
 	i = 0;
 	j = 0;
-	if (line == NULL || !check_texture(all))
+	if (line == NULL || all->tex_num != 7)
 		return (-1);
 	if (!check_border(all, line))
 		print_error(-2);
@@ -37,6 +37,7 @@ int		get_map_tmp(t_all *all, char *line)
 		all->map.x = j;
 	if (++all->map.y == 80 || all->map.x == 80)
 		print_error(-2);
+	fill_map_tmp(all);
 	return (0);
 }
 

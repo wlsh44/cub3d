@@ -17,9 +17,7 @@ void	first_init(t_all *all)
 	int	x;
 	int	y;
 
-	y = 0;
-	all->pos.x = 0;
-	all->pos.y = 0;
+	y = -1;
 	all->dir.x = -1.0;
 	all->dir.y = 0;
 	all->plane.x = 0;
@@ -28,15 +26,18 @@ void	first_init(t_all *all)
 	all->map.y = 0;
 	all->win.x = 0;
 	all->win.y = 0;
+	all->tex_num = 0;
 	all->sprite_num = 0;
 	all->texture = malloc(sizeof(int *) * 7);
-	while (y < 7)
+	while (++y < 7)
 	{
 		x = 0;
 		all->texture[y] = malloc(sizeof(int) * (TEX_H * TEX_H));
 		while (x < TEX_H * TEX_H)
+		{
+			all->map.tmp[y][x] = 0;
 			all->texture[y][x++] = 0;
-		y++;
+		}
 	}
 }
 
@@ -52,7 +53,7 @@ void	second_init(t_all *all)
 		x = 0;
 		all->buf[y] = malloc(sizeof(int) * all->win.x);
 		while (x < all->win.x)
-			all->buf[y][x++] = 0;
+			all->buf[y][x++] = -1;
 		y++;
 	}
 	all->z_buf = malloc(sizeof(int) * all->win.x);
@@ -71,11 +72,17 @@ void	cub3d(char *file, int save)
 
 int		main(int argc, char *argv[])
 {
-	if (argc == 3 && namecheck(argv[1], "cub") && savecheck(argv[2], "--save"))
+	if (!namecheck(argv[1], "cub"))
+		print_error(-1);
+	if (argc == 3)
+	{
+		if (!savecheck(argv[2], "--save"))
+			print_error(0);
 		cub3d(argv[1], 1);
-	else if (argc == 2 && namecheck(argv[1], "cub"))
+	}
+	else if (argc == 2)
 		cub3d(argv[1], 0);
 	else
-		print_error(-5);
+		print_error(0);
 	return (0);
 }

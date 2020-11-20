@@ -18,6 +18,7 @@ int		get_texture(t_all *all, char *line, int i)
 
 	if (!namecheck(line, "xpm"))
 		return (-5);
+	all->tex_num++;
 	return (load_image(all, all->texture[i], line, &img));
 }
 
@@ -62,6 +63,7 @@ int		get_color(t_all *all, char *line, int num)
 	b = ft_atoi(line, &i);
 	if (line[i] != '\0' || r > 255 || g > 255 || b > 255)
 		return (-4);
+	all->tex_num++;
 	set_color(all, num, r * 256 * 256 + g * 256 + b);
 	return (0);
 }
