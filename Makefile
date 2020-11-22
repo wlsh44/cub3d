@@ -1,6 +1,6 @@
 CC = gcc
 
-FLAGS = -Wall -Wextra -Werror #-fsanitize=address
+FLAGS = -Wall -Wextra -Werror -fsanitize=address
 NAME = cub3D
 
 SRC = main.c \
@@ -34,17 +34,17 @@ all: $(NAME)
 
 $(NAME): $(MLX) $(OBJS)
 		#$(CC) $(FLAGS) -I $(HEADER) -lmlx -framework $(OBJS) -o $(NAME)
-		$(CC) $(FLAGS) -I $(HEADER) -lmlx -framework OpenGL -framework AppKit libmlx.dylib $(OBJS) -o $(NAME)
+		$(CC) $(FLAGS) -I $(HEADER) -lmlx -framework OpenGL -framework AppKit $(MLX) $(OBJS) -o $(NAME)
 
 $(MLX):
-				@$(MAKE) -C mlx
+				@$(MAKE) -C minilibx_mms_20200219
 				@mv minilibx_mms_20200219/$(MLX) .
 
 .c.o:
 		$(CC) $(FLAGS) -I $(HEADER) -c $< -o $@
 
 clean:
-		rm -rf $(OBJS)
+		rm -rf $(OBJS) $(MLX)
 
 fclean: clean
 		rm -rf $(NAME)
