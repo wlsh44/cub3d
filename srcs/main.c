@@ -72,16 +72,20 @@ void	cub3d(char *file, int save)
 
 int		main(int argc, char *argv[])
 {
-	if (!namecheck(argv[1], "cub"))
-		print_error(-1);
 	if (argc == 3)
 	{
+		if (!namecheck(argv[1], "cub"))
+			print_error(-1);
 		if (!savecheck(argv[2], "--save"))
 			print_error(0);
 		cub3d(argv[1], 1);
 	}
 	else if (argc == 2)
+	{
+		if (!namecheck(argv[1], "cub"))
+			print_error(-1);
 		cub3d(argv[1], 0);
+	}
 	else
 		print_error(0);
 	return (0);
